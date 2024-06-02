@@ -333,10 +333,10 @@ test('find() - HEAD', () => {
 	);
 
 	const out = ctx.find('HEAD', '/foo');
-	assert.is(out.handlers.length, 3, 'found 3 handlers');
+	assert.is(out.handlers.length, 2, 'found 2 handlers');
 
 	out.handlers.forEach(fn => fn(out));
-	assert.is(chain, 3, 'ran handlers sequentially');
+	assert.is(chain, 2, 'ran handlers sequentially');
 });
 
 
@@ -349,10 +349,10 @@ test('find() - order', () => {
 				assert.is(chain++, 0, '~> ran "ALL /foo" 1st');
 			})
 			.get('/foo', () => {
-				assert.is(chain++, 1, '~> ran "GET /foo" 2nd');
+				assert.unreachable('should not run');
 			})
 			.head('/foo', () => {
-				assert.is(chain++, 2, '~> ran "HEAD /foo" 3rd');
+				assert.is(chain++, 1, '~> ran "GET /foo" 2nd');
 			})
 			.get('/', () => {
 				assert.unreachable('should not run')
@@ -360,10 +360,10 @@ test('find() - order', () => {
 	);
 
 	const out = ctx.find('HEAD', '/foo');
-	assert.is(out.handlers.length, 3, 'found 3 handlers');
+	assert.is(out.handlers.length, 2, 'found 2 handlers');
 
 	out.handlers.forEach(fn => fn(out));
-	assert.is(chain, 3, 'ran handlers sequentially');
+	assert.is(chain, 2, 'ran handlers sequentially');
 });
 
 
